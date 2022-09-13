@@ -1,0 +1,30 @@
+trainset: gta5
+valset: cityscapes
+
+model:
+    pretrained: True
+    bn_backbone:  bn
+    bn_aspp: bn
+    bn_decoder: bn 
+
+data:
+    source:
+        name: gta5
+        rootpath: dataset/GTA5
+        imagepath: dataset/gta_stylized
+        split: all
+        img_rows: 1052 
+        img_cols: 1914
+        batch_size: 8
+        img_norm: True
+        mean: [0.485, 0.456, 0.406]
+        std: [0.229, 0.224, 0.225]
+        n_class: 19
+        num_workers: 8
+    target:
+        shuffle: False
+
+
+training:
+    resume: pretrained/gta5_warmup_model.pkl
+    resume_flag: True

@@ -1,0 +1,27 @@
+data:
+    source:
+        name: gta5
+        rootpath: dataset/GTA5
+        split: all
+        imagepath: dataset/gta_stylized
+        img_rows: 128 
+        img_cols: 256
+        batch_size: 1
+        img_norm: True
+        mean: [0.0, 0.0, 0.0]
+        std: [1., 1., 1.]
+        n_class: 19
+        num_workers: 1
+    target:
+        name: cityscapes
+        rootpath: dataset/CityScape
+        split: train
+        img_rows: 128
+        img_cols: 256
+        batch_size: 1
+        img_norm: True
+        mean: [0.0, 0.0, 0.0]
+        std: [1., 1., 1.]
+        n_class: 19
+        num_workers: 1
+    n_class: 19

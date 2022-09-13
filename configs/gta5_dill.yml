@@ -1,0 +1,97 @@
+trainset: gta5
+valset: cityscapes
+
+model:
+    pretrained: True
+    bn_backbone:  bn
+    bn_aspp: bn
+    bn_decoder: bn 
+
+data:
+    source:
+        name: gta5
+        rootpath: dataset/GTA5
+        imagepath: dataset/gta_stylized
+        split: all
+        img_rows: 1052 
+        img_cols: 1914
+        batch_size: 4
+        img_norm: True
+        use_reweight_map: True
+        reweight_map_path: gta5_stm
+        mean: [0.485, 0.456, 0.406]
+        std: [0.229, 0.224, 0.225]
+        n_class: 19
+        num_workers: 6
+        augmentations:
+            rsize: [2200, 0.5, 1.5]
+            hue: 0.2
+            brightness: 0.5
+            saturation: 0.5
+            contrast: 0.5
+            rcrop: [896, 512, 1.0]
+            hflip: 0.5
+    target:
+        name: cityscapes
+        rootpath: dataset/CityScape
+        split: train
+        img_rows: 1024
+        img_cols: 2048
+        batch_size: 4
+        img_norm: True
+        labelpath: pseudolabels_dill
+        mean: [0.485, 0.456, 0.406]
+        std: [0.229, 0.224, 0.225]
+        n_class: 19
+        num_workers: 6
+        augmentations:
+            rsize: [2048, 0.5, 1.5]
+            hue: 0.1
+            brightness: 0.1
+            saturation: 0.5
+            contrast: 0.5
+            rcrop: [896, 512, 1.0]
+            hflip: 0.5
+    target_valid:
+        name: cityscapes
+        rootpath: dataset/CityScape
+        split: val
+        img_rows: 1024
+        img_cols: 2048
+        batch_size: 2
+        img_norm: True
+        mean: [0.485, 0.456, 0.406]
+        std: [0.229, 0.224, 0.225]
+        n_class: 19
+        num_workers: 2
+    n_class: 19
+
+training:
+    scaler: True
+    train_iters: 90000
+    val_interval: 1000
+    print_interval: 200
+    loss_source_seg: True
+    loss_target_seg: True
+    sce_loss_target: True
+    distillation: True
+    valid_classes: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
+    optimizer:
+        name: 'SGD'
+        lr: 0.0005
+        weight_decay: 5.0e-4
+        momentum: 0.9
+    head_10x_lr: True
+    loss:
+        name: 'cross_entropy'
+    lr_schedule:
+        name: 'poly_lr'
+        eta_min: 0.0000001
+        T_max: 90000
+        warmup_iters: 400
+    resume: pretrained/r101_1x_sk0.pth
+    # distillation_resume: ***
+    resume_flag: True
+    
+test:
+    resize_size: [[1024, 2048]] 
